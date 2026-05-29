@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sykluslogg</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6ee;
+    --blush: #e8c4b0;
+    --rose: #c47a5a;
+    --deep: #5c3d2e;
+    --muted: #9e7b6b;
+    --lavender: #c4b0d4;
+    --sage: #a8c4a8;
+    --gold: #d4a853;
+    --light-rose: #f5ddd3;
+    --card: #fffaf6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--deep);
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(ellipse at 20% 20%, rgba(196,176,212,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(168,196,168,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 10%, rgba(232,196,176,0.2) 0%, transparent 40%);
+  }
+
+  header {
+    padding: 2.5rem 2rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(196,122,90,0.15);
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--deep);
+    letter-spacing: -0.02em;
+  }
+
+  header h1 span {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  header p {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  /* DATE SECTION */
+  .date-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .today-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--deep);
+  }
+
+  .date-display {
+    font-size: 0.82rem;
+    color: var(--muted);
+    background: rgba(196,122,90,0.1);
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+  }
+
+  /* PHASE BANNER */
+  .phase-banner {
+    background: var(--card);
+    border: 1px solid rgba(196,122,90,0.2);
+    border-radius: 16px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 12px rgba(92,61,46,0.05);
+  }
+
+  .phase-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .phase-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .phase-info p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* SLIDERS */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--rose);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  .sliders-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .slider-card {
+    background: var(--card);
+    border: 1px solid rgba(196,122,90,0.15);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 1px 8px rgba(92,61,46,0.04);
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .slider-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .slider-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--rose);
+    font-weight: 600;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, var(--rose) 0%, var(--rose) var(--val, 50%), rgba(196,122,90,0.2) var(--val, 50%));
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border: 2px solid var(--rose);
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(196,122,90,0.3);
+  }
+
+  /* SYMPTOMS */
+  .symptoms-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .symptom-chip {
+    background: var(--card);
+    border: 1.5px solid rgba(196,122,90,0.2);
+    border-radius: 20px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    color: var(--deep);
+  }
+
+  .symptom-chip.active {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+  }
+
+  /* NOTES */
+  .notes-area {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid rgba(196,122,90,0.2);
+    border-radius: 14px;
+    padding: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--deep);
+    resize: none;
+    outline: none;
+    min-height: 80px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 8px rgba(92,61,46,0.04);
+  }
+
+  .notes-area::placeholder { color: var(--muted); }
+  .notes-area:focus { border-color: var(--rose); }
+
+  /* SAVE BUTTON */
+  .save-btn {
+    width: 100%;
+    background: var(--deep);
+    color: var(--cream);
+    border: none;
+    border-radius: 14px;
+    padding: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+
+  .save-btn:hover { background: var(--rose); }
+  .save-btn:active { transform: scale(0.99); }
+
+  /* LOG HISTORY */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(196,122,90,0.2);
+  }
+
+  .log-entry {
+    background: var(--card);
+    border: 1px solid rgba(196,122,90,0.15);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 1px 6px rgba(92,61,46,0.04);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .log-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.6rem;
+  }
+
+  .log-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+  }
+
+  .log-phase {
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: rgba(196,122,90,0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+  }
+
+  .log-bars {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+
+  .log-bar {
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .mini-dots {
+    display: flex;
+    gap: 2px;
+  }
+
+  .mini-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(196,122,90,0.15);
+  }
+
+  .mini-dot.filled { background: var(--rose); }
+
+  .log-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .log-chip {
+    font-size: 0.72rem;
+    background: rgba(196,176,212,0.2);
+    color: var(--deep);
+    padding: 0.2rem 0.55rem;
+    border-radius: 10px;
+  }
+
+  .log-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: rgba(196,122,90,0.35);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .delete-btn:hover { color: var(--rose); }
+
+  .empty-log {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 1.5rem;
+    font-style: italic;
+  }
+
+  .export-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--rose);
+    border: 1.5px solid var(--rose);
+    border-radius: 14px;
+    padding: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+  }
+  .export-btn:hover { background: var(--rose); color: white; }
+
+  /* PHASE COLORS */
+  .phase-mens { color: #c47a7a; }
+  .phase-follicle { color: var(--gold); }
+  .phase-ovulation { color: #7aa87a; }
+  .phase-luteal { color: var(--lavender); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Syklus<span>logg</span></h1>
+  <p>Bli kjent med din egen rytme</p>
+</header>
+
+<div class="container">
+
+  <div class="date-row">
+    <span class="today-label">I dag</span>
+    <span class="date-display" id="todayDate"></span>
+  </div>
+
+  <div class="phase-banner" id="phaseBanner">
+    <div class="phase-icon" id="phaseIcon">🌙</div>
+    <div class="phase-info">
+      <h3 id="phaseName">Velg symptomer for å se fase</h3>
+      <p id="phaseAdvice">Logg energi og humør for å identifisere mønster over tid.</p>
+    </div>
+  </div>
+
+  <p class="section-title">Energi & humør</p>
+  <div class="sliders-grid">
+    <div class="slider-card">
+      <div class="slider-header">
+        <span class="slider-label">⚡ Energi</span>
+        <span class="slider-value" id="energyVal">5</span>
+      </div>
+      <input type="range" min="1" max="10" value="5" id="energy" oninput="updateSlider(this, 'energyVal')">
+    </div>
+    <div class="slider-card">
+      <div class="slider-header">
+        <span class="slider-label">🌸 Humør</span>
+        <span class="slider-value" id="moodVal">5</span>
+      </div>
+      <input type="range" min="1" max="10" value="5" id="mood" oninput="updateSlider(this, 'moodVal')">
+    </div>
+    <div class="slider-card">
+      <div class="slider-header">
+        <span class="slider-label">🔥 Libido</span>
+        <span class="slider-value" id="libidoVal">5</span>
+      </div>
+      <input type="range" min="1" max="10" value="5" id="libido" oninput="updateSlider(this, 'libidoVal')">
+    </div>
+    <div class="slider-card">
+      <div class="slider-header">
+        <span class="slider-label">🧠 Fokus</span>
+        <span class="slider-value" id="focusVal">5</span>
+      </div>
+      <input type="range" min="1" max="10" value="5" id="focus" oninput="updateSlider(this, 'focusVal')">
+    </div>
+    <div class="slider-card">
+      <div class="slider-header">
+        <span class="slider-label">😴 Søvn</span>
+        <span class="slider-value" id="sleepVal">5</span>
+      </div>
+      <input type="range" min="1" max="10" value="5" id="sleep" oninput="updateSlider(this, 'sleepVal')">
+    </div>
+    <div class="slider-card">
+      <div class="slider-header">
+        <span class="slider-label">💬 Sosial lyst</span>
+        <span class="slider-value" id="socialVal">5</span>
+      </div>
+      <input type="range" min="1" max="10" value="5" id="social" oninput="updateSlider(this, 'socialVal')">
+    </div>
+  </div>
+
+  <p class="section-title">Symptomer</p>
+  <div class="symptoms-grid" id="symptomsGrid"></div>
+
+  <p class="section-title">Notater (valgfritt)</p>
+  <textarea class="notes-area" id="notes" placeholder="Hva merker du i dag? Spesielle situasjoner, drømmer, tanker..."></textarea>
+
+  <button class="save-btn" onclick="saveEntry()">✦ Lagre dagens logg</button>
+
+  <div class="divider">Tidligere dager</div>
+  <button class="export-btn" onclick="exportCSV()">⬇ Eksporter alle logger som CSV</button>
+  <div id="logHistory"></div>
+
+</div>
+
+<script>
+const SYMPTOMS = [
+  'Oppblåst', 'Hodepine', 'Brøstspenning', 'Kramper', 'Ryggsmerter',
+  'Tretthet', 'Søvnproblem', 'Kvalme', 'Akne',
+  'Emosjonell', 'Irritabel', 'Engstelig', 'Nedfor', 'Kreativ',
+  'Sosial', 'Innadvendt', 'Fokusert', 'Rastløs',
+  'Økt appetitt', 'Søtsug', 'Redusert appetitt'
+];
+
+const PHASES = {
+  luteal_late: {
+    icon: '🌑',
+    name: 'Sen lutealfase / PMS',
+    advice: 'Rolig tid – prioriter søvn, nærende mat og tid for deg selv. Unngå store beslutninger.',
+    class: 'phase-luteal'
+  },
+  luteal_mid: {
+    icon: '🌘',
+    name: 'Midtre lutealfase',
+    advice: 'Bra for detaljarbeid og å fullføre prosjekter. Trening: yoga, pilates, rolig styrke.',
+    class: 'phase-luteal'
+  },
+  ovulation: {
+    icon: '🌕',
+    name: 'Eggløsningsfase',
+    advice: 'Peak energi! Perfekt for viktige møter, presentasjoner og intensiv trening.',
+    class: 'phase-ovulation'
+  },
+  follicle: {
+    icon: '🌒',
+    name: 'Follikelfase',
+    advice: 'Energien stiger – sett i gang nye prosjekter, lær noe nytt, vær sosial.',
+    class: 'phase-follicle'
+  },
+  menstruation: {
+    icon: '🔴',
+    name: 'Menstruasjonsfase',
+    advice: 'Tid for hvile og refleksjon. Planlegg neste periode, vær snill med deg selv.',
+    class: 'phase-mens'
+  },
+  unknown: {
+    icon: '🌙',
+    name: 'Fortsett å logge',
+    advice: 'Etter noen uker med logging vil mønsteret ditt tre frem.',
+    class: ''
+  }
+};
+
+let selectedSymptoms = new Set();
+
+// Init symptoms
+const grid = document.getElementById('symptomsGrid');
+SYMPTOMS.forEach(s => {
+  const chip = document.createElement('div');
+  chip.className = 'symptom-chip';
+  chip.textContent = s;
+  chip.onclick = () => {
+    chip.classList.toggle('active');
+    if (selectedSymptoms.has(s)) selectedSymptoms.delete(s);
+    else selectedSymptoms.add(s);
+    updatePhaseGuess();
+  };
+  grid.appendChild(chip);
+});
+
+// Date
+const now = new Date();
+document.getElementById('todayDate').textContent = now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
+
+function updateSlider(el, valId) {
+  const pct = ((el.value - 1) / 9 * 100).toFixed(0) + '%';
+  el.style.setProperty('--val', pct);
+  document.getElementById(valId).textContent = el.value;
+  updatePhaseGuess();
+}
+
+// Init slider tracks
+document.querySelectorAll('input[type=range]').forEach(el => {
+  el.style.setProperty('--val', '50%');
+});
+
+function updatePhaseGuess() {
+  const energy = +document.getElementById('energy').value;
+  const mood = +document.getElementById('mood').value;
+  const syms = selectedSymptoms;
+
+  const hasPMS = syms.has('Emosjonell') || syms.has('Irritabel') || syms.has('Oppblåst') || syms.has('Kramper');
+  const highEnergy = energy >= 7;
+  const lowEnergy = energy <= 4;
+  const lowMood = mood <= 4;
+
+  let phase = 'unknown';
+  if (hasPMS && lowMood) phase = 'luteal_late';
+  else if (hasPMS) phase = 'luteal_mid';
+  else if (highEnergy && mood >= 7 && (syms.has('Kreativ') || syms.has('Fokusert'))) phase = 'ovulation';
+  else if (highEnergy) phase = 'follicle';
+  else if (lowEnergy && syms.has('Tretthet')) phase = 'luteal_mid';
+  else if (syms.size === 0 && energy === 5) phase = 'unknown';
+
+  const p = PHASES[phase];
+  document.getElementById('phaseIcon').textContent = p.icon;
+  document.getElementById('phaseName').textContent = p.name;
+  document.getElementById('phaseName').className = p.class;
+  document.getElementById('phaseAdvice').textContent = p.advice;
+}
+
+function saveEntry() {
+  const entry = {
+    id: Date.now(),
+    date: now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
+    dateShort: now.toLocaleDateString('nb-NO'),
+    energy: +document.getElementById('energy').value,
+    mood: +document.getElementById('mood').value,
+    libido: +document.getElementById('libido').value,
+    focus: +document.getElementById('focus').value,
+    sleep: +document.getElementById('sleep').value,
+    social: +document.getElementById('social').value,
+    symptoms: [...selectedSymptoms],
+    notes: document.getElementById('notes').value.trim(),
+    phase: document.getElementById('phaseName').textContent
+  };
+
+  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]');
+  logs.unshift(entry);
+  localStorage.setItem('sykluslogg', JSON.stringify(logs));
+
+  // Reset
+  document.querySelectorAll('.symptom-chip.active').forEach(c => c.classList.remove('active'));
+  selectedSymptoms.clear();
+  document.getElementById('notes').value = '';
+  document.querySelectorAll('input[type=range]').forEach(el => {
+    el.value = 5;
+    el.style.setProperty('--val', '50%');
+  });
+  document.querySelectorAll('.slider-value').forEach(el => el.textContent = '5');
+  updatePhaseGuess();
+  renderLog();
+
+  // Feedback
+  const btn = document.querySelector('.save-btn');
+  btn.textContent = '✓ Lagret!';
+  btn.style.background = '#7aa87a';
+  setTimeout(() => {
+    btn.textContent = '✦ Lagre dagens logg';
+    btn.style.background = '';
+  }, 2000);
+}
+
+function renderLog() {
+  const container = document.getElementById('logHistory');
+  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]');
+  if (logs.length === 0) {
+    container.innerHTML = '<p class="empty-log">Ingen logger ennå – start med å logge i dag!</p>';
+    return;
+  }
+  container.innerHTML = logs.map(e => `
+    <div class="log-entry">
+      <div class="log-entry-header">
+        <span class="log-date">${e.date}</span>
+        <div style="display:flex;gap:0.5rem;align-items:center">
+          <span class="log-phase">${e.phase}</span>
+          <button class="delete-btn" onclick="deleteEntry(${e.id})" title="Slett">✕</button>
+        </div>
+      </div>
+      <div class="log-bars">
+        ${renderBar('⚡', e.energy)}
+        ${renderBar('🌸', e.mood)}
+        ${renderBar('🔥', e.libido)}
+        ${renderBar('🧠', e.focus)}
+        ${renderBar('😴', e.sleep)}
+        ${renderBar('💬', e.social)}
+      </div>
+      ${e.symptoms.length ? `<div class="log-chips">${e.symptoms.map(s => `<span class="log-chip">${s}</span>`).join('')}</div>` : ''}
+      ${e.notes ? `<p class="log-note">"${e.notes}"</p>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderBar(icon, val) {
+  const dots = Array.from({length: 10}, (_, i) => 
+    `<div class="mini-dot ${i < val ? 'filled' : ''}"></div>`
+  ).join('');
+  return `<span class="log-bar">${icon}<div class="mini-dots">${dots}</div>${val}/10</span>`;
+}
+
+function deleteEntry(id) {
+  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]').filter(e => e.id !== id);
+  localStorage.setItem('sykluslogg', JSON.stringify(logs));
+  renderLog();
+}
+
+function exportCSV() {
+  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]');
+  if (logs.length === 0) {
+    alert('Ingen logger å eksportere ennå!');
+    return;
+  }
+  const headers = ['Dato', 'Fase', 'Energi', 'Humør', 'Libido', 'Fokus', 'Søvn', 'Sosial lyst', 'Symptomer', 'Notater'];
+  const rows = logs.map(e => [
+    e.dateShort || e.date,
+    e.phase,
+    e.energy, e.mood, e.libido, e.focus, e.sleep, e.social,
+    '"' + (e.symptoms || []).join(', ') + '"',
+    '"' + (e.notes || '').replace(/"/g, '""') + '"'
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(';')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'sykluslogg.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+renderLog();
+</script>
+</body>
+</html>
