@@ -6,394 +6,340 @@
 <title>Sykluslogg</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #fdf6ee;
-    --blush: #e8c4b0;
-    --rose: #c47a5a;
-    --deep: #5c3d2e;
-    --muted: #9e7b6b;
-    --lavender: #c4b0d4;
-    --sage: #a8c4a8;
-    --gold: #d4a853;
-    --light-rose: #f5ddd3;
-    --card: #fffaf6;
-  }
+:root {
+  --cream: #fdf6ee;
+  --rose: #c47a5a;
+  --deep: #5c3d2e;
+  --muted: #9e7b6b;
+  --lavender: #c4b0d4;
+  --sage: #a8c4a8;
+  --gold: #d4a853;
+  --card: #fffaf6;
+  --green: #7aa87a;
+  --blue: #7a9ec4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--deep);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(196,176,212,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(168,196,168,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 10%, rgba(232,196,176,0.2) 0%, transparent 40%);
+}
+header {
+  padding: 1.8rem 2rem 0;
+  text-align: center;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--deep);
+  letter-spacing: -0.02em;
+}
+header h1 span { font-style: italic; color: var(--rose); }
+header p { margin-top: 0.3rem; font-size: 0.82rem; color: var(--muted); font-weight: 300; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  max-width: 680px;
+  margin: 1.2rem auto 0;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(196,122,90,0.2);
+}
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.7rem 0.5rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.tab-btn.active { color: var(--rose); border-bottom-color: var(--rose); }
+.tab-btn span { display: block; font-size: 1.1rem; margin-bottom: 0.1rem; }
 
-  body {
-    background: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--deep);
-    min-height: 100vh;
-    background-image: 
-      radial-gradient(ellipse at 20% 20%, rgba(196,176,212,0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(168,196,168,0.12) 0%, transparent 50%),
-      radial-gradient(ellipse at 60% 10%, rgba(232,196,176,0.2) 0%, transparent 40%);
-  }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-  header {
-    padding: 2.5rem 2rem 1.5rem;
-    text-align: center;
-    border-bottom: 1px solid rgba(196,122,90,0.15);
-  }
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
 
-  header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    color: var(--deep);
-    letter-spacing: -0.02em;
-  }
+/* SHARED */
+.section-title {
+  font-size: 0.72rem;
+  color: var(--rose);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.card {
+  background: var(--card);
+  border: 1px solid rgba(196,122,90,0.15);
+  border-radius: 14px;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 8px rgba(92,61,46,0.04);
+}
+.date-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+.today-label { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+.date-display {
+  font-size: 0.8rem; color: var(--muted);
+  background: rgba(196,122,90,0.1); padding: 0.3rem 0.75rem; border-radius: 20px;
+}
 
-  header h1 span {
-    font-style: italic;
-    color: var(--rose);
-  }
+/* PHASE BANNER */
+.phase-banner {
+  background: var(--card); border: 1px solid rgba(196,122,90,0.2);
+  border-radius: 16px; padding: 1.1rem 1.3rem; margin-bottom: 1.3rem;
+  display: flex; align-items: center; gap: 1rem;
+  box-shadow: 0 2px 12px rgba(92,61,46,0.05);
+}
+.phase-icon { font-size: 1.8rem; flex-shrink: 0; }
+.phase-info h3 { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.phase-info p { font-size: 0.76rem; color: var(--muted); line-height: 1.4; }
 
-  header p {
-    margin-top: 0.4rem;
-    font-size: 0.85rem;
-    color: var(--muted);
-    font-weight: 300;
-  }
+/* SLIDERS */
+.sliders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.3rem; }
+.slider-card {
+  background: var(--card); border: 1px solid rgba(196,122,90,0.15);
+  border-radius: 14px; padding: 0.9rem 1rem;
+  box-shadow: 0 1px 8px rgba(92,61,46,0.04);
+}
+.slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.slider-label { font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 0.3rem; }
+.slider-value { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--rose); font-weight: 600; }
+input[type="range"] {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  background: linear-gradient(to right, var(--rose) 0%, var(--rose) var(--val, 50%), rgba(196,122,90,0.2) var(--val, 50%));
+  border-radius: 2px; outline: none; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; background: white;
+  border: 2px solid var(--rose); border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(196,122,90,0.3);
+}
 
-  .container {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 1.5rem 1rem 3rem;
-  }
+/* CHIPS */
+.chips-wrap { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.3rem; }
+.chip {
+  background: var(--card); border: 1.5px solid rgba(196,122,90,0.2);
+  border-radius: 20px; padding: 0.35rem 0.85rem;
+  font-size: 0.78rem; cursor: pointer; transition: all 0.2s;
+  user-select: none; color: var(--deep);
+}
+.chip.active { background: var(--rose); border-color: var(--rose); color: white; }
 
-  /* DATE SECTION */
-  .date-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-  }
+/* NOTES */
+.notes-area {
+  width: 100%; background: var(--card); border: 1px solid rgba(196,122,90,0.2);
+  border-radius: 14px; padding: 0.9rem; font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem; color: var(--deep); resize: none; outline: none;
+  min-height: 70px; margin-bottom: 1.3rem;
+}
+.notes-area::placeholder { color: var(--muted); }
+.notes-area:focus { border-color: var(--rose); }
 
-  .today-label {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--deep);
-  }
+/* BUTTONS */
+.save-btn {
+  width: 100%; background: var(--deep); color: var(--cream);
+  border: none; border-radius: 14px; padding: 0.95rem;
+  font-family: 'Playfair Display', serif; font-size: 1rem;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 1.8rem;
+}
+.save-btn:hover { background: var(--rose); }
+.export-btn {
+  width: 100%; background: transparent; color: var(--rose);
+  border: 1.5px solid var(--rose); border-radius: 14px; padding: 0.8rem;
+  font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 1rem;
+}
+.export-btn:hover { background: var(--rose); color: white; }
 
-  .date-display {
-    font-size: 0.82rem;
-    color: var(--muted);
-    background: rgba(196,122,90,0.1);
-    padding: 0.3rem 0.75rem;
-    border-radius: 20px;
-  }
+/* DIVIDER */
+.divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1.2rem; color: var(--muted);
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: rgba(196,122,90,0.2);
+}
 
-  /* PHASE BANNER */
-  .phase-banner {
-    background: var(--card);
-    border: 1px solid rgba(196,122,90,0.2);
-    border-radius: 16px;
-    padding: 1.2rem 1.4rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: 0 2px 12px rgba(92,61,46,0.05);
-  }
+/* LOG ENTRIES */
+.log-entry {
+  background: var(--card); border: 1px solid rgba(196,122,90,0.15);
+  border-radius: 14px; padding: 0.9rem 1.1rem; margin-bottom: 0.7rem;
+  box-shadow: 0 1px 6px rgba(92,61,46,0.04);
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.log-entry-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+.log-date { font-family: 'Playfair Display', serif; font-size: 0.9rem; }
+.log-phase { font-size: 0.72rem; color: var(--muted); background: rgba(196,122,90,0.1); padding: 0.2rem 0.55rem; border-radius: 10px; }
+.log-bars { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+.log-bar { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 0.25rem; }
+.mini-dots { display: flex; gap: 2px; }
+.mini-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(196,122,90,0.15); }
+.mini-dot.filled { background: var(--rose); }
+.log-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.35rem; }
+.log-chip { font-size: 0.7rem; background: rgba(196,176,212,0.2); color: var(--deep); padding: 0.15rem 0.5rem; border-radius: 10px; }
+.log-note { font-size: 0.78rem; color: var(--muted); font-style: italic; line-height: 1.4; }
+.delete-btn { background: none; border: none; color: rgba(196,122,90,0.35); cursor: pointer; font-size: 0.82rem; transition: color 0.2s; }
+.delete-btn:hover { color: var(--rose); }
+.empty-log { text-align: center; color: var(--muted); font-size: 0.84rem; padding: 1.5rem; font-style: italic; }
 
-  .phase-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-  }
+/* PHASE COLORS */
+.phase-mens { color: #c47a7a; }
+.phase-follicle { color: var(--gold); }
+.phase-ovulation { color: #7aa87a; }
+.phase-luteal { color: var(--lavender); }
 
-  .phase-info h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
-  }
+/* ===================== MAT TAB ===================== */
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-bottom: 1.2rem; }
+.input-group { display: flex; flex-direction: column; gap: 0.3rem; }
+.input-group label { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+.input-group input, .input-group select {
+  background: var(--card); border: 1px solid rgba(196,122,90,0.2);
+  border-radius: 10px; padding: 0.6rem 0.8rem;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--deep);
+  outline: none; width: 100%;
+}
+.input-group input:focus, .input-group select:focus { border-color: var(--rose); }
 
-  .phase-info p {
-    font-size: 0.78rem;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+/* KALORI RING */
+.calorie-summary {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+.ring-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center;
+}
+.ring-kcal { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--deep); line-height: 1; }
+.ring-label { font-size: 0.62rem; color: var(--muted); }
+.macro-bars { flex: 1; }
+.macro-row { margin-bottom: 0.5rem; }
+.macro-label-row { display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--muted); margin-bottom: 0.2rem; }
+.macro-track { height: 6px; background: rgba(196,122,90,0.12); border-radius: 3px; overflow: hidden; }
+.macro-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+.fill-protein { background: var(--rose); }
+.fill-carbs { background: var(--gold); }
+.fill-fat { background: var(--lavender); }
 
-  /* SLIDERS */
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    color: var(--rose);
-    margin-bottom: 0.8rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-  }
+/* MAT SØKEFELT */
+.food-search-wrap { position: relative; margin-bottom: 1rem; }
+.food-search-input {
+  width: 100%; background: var(--card);
+  border: 1px solid rgba(196,122,90,0.2); border-radius: 14px;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--deep);
+  outline: none;
+}
+.food-search-input:focus { border-color: var(--rose); }
+.search-icon { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+.food-suggestions {
+  background: var(--card); border: 1px solid rgba(196,122,90,0.2);
+  border-radius: 12px; overflow: hidden; margin-top: 0.3rem;
+  box-shadow: 0 4px 16px rgba(92,61,46,0.1);
+}
+.food-suggestion-item {
+  padding: 0.7rem 1rem; font-size: 0.82rem; cursor: pointer;
+  border-bottom: 1px solid rgba(196,122,90,0.08); transition: background 0.15s;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.food-suggestion-item:hover { background: rgba(196,122,90,0.06); }
+.food-suggestion-item:last-child { border-bottom: none; }
+.food-kcal-badge { font-size: 0.72rem; color: var(--muted); }
+.hidden { display: none; }
 
-  .sliders-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem;
-    margin-bottom: 1.5rem;
-  }
+/* CUSTOM MAT */
+.custom-food-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.8rem; align-items: end; }
+.custom-food-row .input-group label { font-size: 0.68rem; }
+.add-food-btn {
+  background: var(--rose); color: white; border: none;
+  border-radius: 10px; padding: 0.6rem 0.8rem;
+  font-size: 0.8rem; cursor: pointer; transition: background 0.2s;
+  white-space: nowrap; align-self: end;
+}
+.add-food-btn:hover { background: var(--deep); }
 
-  .slider-card {
-    background: var(--card);
-    border: 1px solid rgba(196,122,90,0.15);
-    border-radius: 14px;
-    padding: 1rem 1.1rem;
-    box-shadow: 0 1px 8px rgba(92,61,46,0.04);
-  }
+/* MAT LISTE */
+.food-list-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px solid rgba(196,122,90,0.1);
+  font-size: 0.82rem;
+}
+.food-list-item:last-child { border-bottom: none; }
+.food-list-name { font-weight: 500; }
+.food-list-macros { color: var(--muted); font-size: 0.72rem; margin-top: 0.1rem; }
+.food-list-kcal { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--rose); }
 
-  .slider-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.6rem;
-  }
+/* ===================== TRENING TAB ===================== */
+.exercise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-bottom: 1rem; }
+.exercise-card {
+  background: var(--card); border: 1.5px solid rgba(196,122,90,0.15);
+  border-radius: 14px; padding: 0.9rem 1rem; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.exercise-card.active { border-color: var(--green); background: rgba(122,168,122,0.08); }
+.exercise-card .ex-icon { font-size: 1.6rem; margin-bottom: 0.3rem; }
+.exercise-card .ex-name { font-size: 0.8rem; font-weight: 500; }
+.exercise-card .ex-kcal { font-size: 0.7rem; color: var(--muted); margin-top: 0.1rem; }
 
-  .slider-label {
-    font-size: 0.82rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
+.burn-summary {
+  background: var(--card); border: 1px solid rgba(122,168,122,0.3);
+  border-radius: 14px; padding: 1rem 1.2rem; margin-bottom: 1rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.burn-number { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--green); }
+.burn-label { font-size: 0.75rem; color: var(--muted); }
+.net-cal { text-align: right; }
+.net-number { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+.net-number.surplus { color: var(--rose); }
+.net-number.deficit { color: var(--green); }
 
-  .slider-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--rose);
-    font-weight: 600;
-  }
+.duration-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.duration-wrap label { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.duration-input {
+  background: var(--card); border: 1px solid rgba(196,122,90,0.2);
+  border-radius: 10px; padding: 0.55rem 0.8rem;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--deep);
+  outline: none; width: 90px; text-align: center;
+}
+.intensity-wrap { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; }
+.intensity-btn {
+  flex: 1; background: var(--card); border: 1.5px solid rgba(196,122,90,0.2);
+  border-radius: 10px; padding: 0.5rem; font-size: 0.78rem; cursor: pointer;
+  transition: all 0.2s; color: var(--deep);
+}
+.intensity-btn.active { background: var(--green); border-color: var(--green); color: white; }
 
-  input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(to right, var(--rose) 0%, var(--rose) var(--val, 50%), rgba(196,122,90,0.2) var(--val, 50%));
-    border-radius: 2px;
-    outline: none;
-    cursor: pointer;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    background: white;
-    border: 2px solid var(--rose);
-    border-radius: 50%;
-    box-shadow: 0 1px 4px rgba(196,122,90,0.3);
-  }
-
-  /* SYMPTOMS */
-  .symptoms-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .symptom-chip {
-    background: var(--card);
-    border: 1.5px solid rgba(196,122,90,0.2);
-    border-radius: 20px;
-    padding: 0.4rem 0.9rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-    color: var(--deep);
-  }
-
-  .symptom-chip.active {
-    background: var(--rose);
-    border-color: var(--rose);
-    color: white;
-  }
-
-  /* NOTES */
-  .notes-area {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid rgba(196,122,90,0.2);
-    border-radius: 14px;
-    padding: 1rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    color: var(--deep);
-    resize: none;
-    outline: none;
-    min-height: 80px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 1px 8px rgba(92,61,46,0.04);
-  }
-
-  .notes-area::placeholder { color: var(--muted); }
-  .notes-area:focus { border-color: var(--rose); }
-
-  /* SAVE BUTTON */
-  .save-btn {
-    width: 100%;
-    background: var(--deep);
-    color: var(--cream);
-    border: none;
-    border-radius: 14px;
-    padding: 1rem;
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
-    margin-bottom: 2rem;
-  }
-
-  .save-btn:hover { background: var(--rose); }
-  .save-btn:active { transform: scale(0.99); }
-
-  /* LOG HISTORY */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(196,122,90,0.2);
-  }
-
-  .log-entry {
-    background: var(--card);
-    border: 1px solid rgba(196,122,90,0.15);
-    border-radius: 14px;
-    padding: 1rem 1.2rem;
-    margin-bottom: 0.8rem;
-    box-shadow: 0 1px 6px rgba(92,61,46,0.04);
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .log-entry-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 0.6rem;
-  }
-
-  .log-date {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-  }
-
-  .log-phase {
-    font-size: 0.75rem;
-    color: var(--muted);
-    background: rgba(196,122,90,0.1);
-    padding: 0.2rem 0.6rem;
-    border-radius: 10px;
-  }
-
-  .log-bars {
-    display: flex;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.5rem;
-  }
-
-  .log-bar {
-    font-size: 0.75rem;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
-  .mini-dots {
-    display: flex;
-    gap: 2px;
-  }
-
-  .mini-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(196,122,90,0.15);
-  }
-
-  .mini-dot.filled { background: var(--rose); }
-
-  .log-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    margin-bottom: 0.4rem;
-  }
-
-  .log-chip {
-    font-size: 0.72rem;
-    background: rgba(196,176,212,0.2);
-    color: var(--deep);
-    padding: 0.2rem 0.55rem;
-    border-radius: 10px;
-  }
-
-  .log-note {
-    font-size: 0.8rem;
-    color: var(--muted);
-    font-style: italic;
-    line-height: 1.4;
-  }
-
-  .delete-btn {
-    background: none;
-    border: none;
-    color: rgba(196,122,90,0.35);
-    cursor: pointer;
-    font-size: 0.85rem;
-    padding: 0;
-    line-height: 1;
-    transition: color 0.2s;
-  }
-  .delete-btn:hover { color: var(--rose); }
-
-  .empty-log {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.85rem;
-    padding: 1.5rem;
-    font-style: italic;
-  }
-
-  .export-btn {
-    width: 100%;
-    background: transparent;
-    color: var(--rose);
-    border: 1.5px solid var(--rose);
-    border-radius: 14px;
-    padding: 0.85rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 1rem;
-    letter-spacing: 0.02em;
-  }
-  .export-btn:hover { background: var(--rose); color: white; }
-
-  /* PHASE COLORS */
-  .phase-mens { color: #c47a7a; }
-  .phase-follicle { color: var(--gold); }
-  .phase-ovulation { color: #7aa87a; }
-  .phase-luteal { color: var(--lavender); }
+/* TRAINING LOG */
+.train-log-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px solid rgba(196,122,90,0.1);
+  font-size: 0.82rem;
+}
+.train-log-item:last-child { border-bottom: none; }
 </style>
 </head>
 <body>
@@ -403,14 +349,22 @@
   <p>Bli kjent med din egen rytme</p>
 </header>
 
-<div class="container">
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('syklus', this)"><span>🌙</span>Syklus</button>
+  <button class="tab-btn" onclick="switchTab('mat', this)"><span>🥗</span>Mat</button>
+  <button class="tab-btn" onclick="switchTab('trening', this)"><span>🏃</span>Trening</button>
+  <button class="tab-btn" onclick="switchTab('profil', this)"><span>⚙️</span>Profil</button>
+</div>
 
+<!-- ============ SYKLUS TAB ============ -->
+<div id="tab-syklus" class="tab-content active">
+<div class="container">
   <div class="date-row">
     <span class="today-label">I dag</span>
     <span class="date-display" id="todayDate"></span>
   </div>
 
-  <div class="phase-banner" id="phaseBanner">
+  <div class="phase-banner">
     <div class="phase-icon" id="phaseIcon">🌙</div>
     <div class="phase-info">
       <h3 id="phaseName">Velg symptomer for å se fase</h3>
@@ -421,279 +375,675 @@
   <p class="section-title">Energi & humør</p>
   <div class="sliders-grid">
     <div class="slider-card">
-      <div class="slider-header">
-        <span class="slider-label">⚡ Energi</span>
-        <span class="slider-value" id="energyVal">5</span>
-      </div>
-      <input type="range" min="1" max="10" value="5" id="energy" oninput="updateSlider(this, 'energyVal')">
+      <div class="slider-header"><span class="slider-label">⚡ Energi</span><span class="slider-value" id="energyVal">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="energy" oninput="updateSlider(this,'energyVal')">
     </div>
     <div class="slider-card">
-      <div class="slider-header">
-        <span class="slider-label">🌸 Humør</span>
-        <span class="slider-value" id="moodVal">5</span>
-      </div>
-      <input type="range" min="1" max="10" value="5" id="mood" oninput="updateSlider(this, 'moodVal')">
+      <div class="slider-header"><span class="slider-label">🌸 Humør</span><span class="slider-value" id="moodVal">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="mood" oninput="updateSlider(this,'moodVal')">
     </div>
     <div class="slider-card">
-      <div class="slider-header">
-        <span class="slider-label">🔥 Libido</span>
-        <span class="slider-value" id="libidoVal">5</span>
-      </div>
-      <input type="range" min="1" max="10" value="5" id="libido" oninput="updateSlider(this, 'libidoVal')">
+      <div class="slider-header"><span class="slider-label">🔥 Libido</span><span class="slider-value" id="libidoVal">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="libido" oninput="updateSlider(this,'libidoVal')">
     </div>
     <div class="slider-card">
-      <div class="slider-header">
-        <span class="slider-label">🧠 Fokus</span>
-        <span class="slider-value" id="focusVal">5</span>
-      </div>
-      <input type="range" min="1" max="10" value="5" id="focus" oninput="updateSlider(this, 'focusVal')">
+      <div class="slider-header"><span class="slider-label">🧠 Fokus</span><span class="slider-value" id="focusVal">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="focus" oninput="updateSlider(this,'focusVal')">
     </div>
     <div class="slider-card">
-      <div class="slider-header">
-        <span class="slider-label">😴 Søvn</span>
-        <span class="slider-value" id="sleepVal">5</span>
-      </div>
-      <input type="range" min="1" max="10" value="5" id="sleep" oninput="updateSlider(this, 'sleepVal')">
+      <div class="slider-header"><span class="slider-label">😴 Søvn</span><span class="slider-value" id="sleepVal">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="sleep" oninput="updateSlider(this,'sleepVal')">
     </div>
     <div class="slider-card">
-      <div class="slider-header">
-        <span class="slider-label">💬 Sosial lyst</span>
-        <span class="slider-value" id="socialVal">5</span>
-      </div>
-      <input type="range" min="1" max="10" value="5" id="social" oninput="updateSlider(this, 'socialVal')">
+      <div class="slider-header"><span class="slider-label">💬 Sosial lyst</span><span class="slider-value" id="socialVal">5</span></div>
+      <input type="range" min="1" max="10" value="5" id="social" oninput="updateSlider(this,'socialVal')">
     </div>
   </div>
 
   <p class="section-title">Symptomer</p>
-  <div class="symptoms-grid" id="symptomsGrid"></div>
+  <div class="chips-wrap" id="symptomsGrid"></div>
 
   <p class="section-title">Notater (valgfritt)</p>
-  <textarea class="notes-area" id="notes" placeholder="Hva merker du i dag? Spesielle situasjoner, drømmer, tanker..."></textarea>
+  <textarea class="notes-area" id="notes" placeholder="Hva merker du i dag?"></textarea>
 
-  <button class="save-btn" onclick="saveEntry()">✦ Lagre dagens logg</button>
+  <button class="save-btn" onclick="saveCycleEntry()">✦ Lagre dagens logg</button>
 
   <div class="divider">Tidligere dager</div>
   <button class="export-btn" onclick="exportCSV()">⬇ Eksporter alle logger som CSV</button>
   <div id="logHistory"></div>
+</div>
+</div>
 
+<!-- ============ MAT TAB ============ -->
+<div id="tab-mat" class="tab-content">
+<div class="container">
+  <div class="date-row">
+    <span class="today-label">Mat i dag</span>
+    <span class="date-display" id="matDate"></span>
+  </div>
+
+  <!-- Kalori-ring + makroer -->
+  <div class="calorie-summary">
+    <div class="ring-wrap">
+      <svg width="90" height="90" viewBox="0 0 90 90">
+        <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(196,122,90,0.12)" stroke-width="8"/>
+        <circle id="calRing" cx="45" cy="45" r="38" fill="none" stroke="var(--rose)" stroke-width="8"
+          stroke-dasharray="239" stroke-dashoffset="239" stroke-linecap="round"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-kcal" id="totalKcal">0</div>
+        <div class="ring-label">/ <span id="goalKcal">2000</span> kcal</div>
+      </div>
+    </div>
+    <div class="macro-bars">
+      <div class="macro-row">
+        <div class="macro-label-row"><span>🥩 Protein</span><span id="proteinVal">0 / <span id="proteinGoal">130</span>g</span></div>
+        <div class="macro-track"><div class="macro-fill fill-protein" id="proteinBar" style="width:0%"></div></div>
+      </div>
+      <div class="macro-row">
+        <div class="macro-label-row"><span>🌾 Karbo</span><span id="carbsVal">0 / <span id="carbsGoal">220</span>g</span></div>
+        <div class="macro-track"><div class="macro-fill fill-carbs" id="carbsBar" style="width:0%"></div></div>
+      </div>
+      <div class="macro-row">
+        <div class="macro-label-row"><span>🥑 Fett</span><span id="fatVal">0 / <span id="fatGoal">65</span>g</span></div>
+        <div class="macro-track"><div class="macro-fill fill-fat" id="fatBar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Søk matvare -->
+  <p class="section-title">Legg til matvare</p>
+  <div class="food-search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="food-search-input" id="foodSearch" placeholder="Søk matvare (f.eks. havregrøt, kylling, eple...)" oninput="searchFood()" autocomplete="off">
+    <div class="food-suggestions hidden" id="foodSuggestions"></div>
+  </div>
+
+  <!-- Eller legg til manuelt -->
+  <p class="section-title">Eller legg til manuelt</p>
+  <div class="custom-food-row">
+    <div class="input-group"><label>Navn</label><input type="text" id="customName" placeholder="f.eks. Havregrøt"></div>
+    <div class="input-group"><label>Kcal</label><input type="number" id="customKcal" placeholder="350" min="0"></div>
+    <div class="input-group"><label>Protein g</label><input type="number" id="customProtein" placeholder="12" min="0"></div>
+    <div class="input-group"><label>Karbo g</label><input type="number" id="customCarbs" placeholder="55" min="0"></div>
+    <div class="input-group"><label>Fett g</label><input type="number" id="customFat" placeholder="8" min="0"></div>
+  </div>
+  <button class="add-food-btn" style="width:100%;margin-bottom:1.3rem" onclick="addCustomFood()">+ Legg til</button>
+
+  <!-- Dagens matlogg -->
+  <p class="section-title">Spist i dag</p>
+  <div class="card" id="foodList"><p class="empty-log">Ingen mat logget ennå i dag.</p></div>
+
+  <button class="save-btn" onclick="saveFoodLog()">✦ Lagre matlogg</button>
+
+  <div class="divider">Tidligere dager</div>
+  <div id="foodHistory"></div>
+</div>
+</div>
+
+<!-- ============ TRENING TAB ============ -->
+<div id="tab-trening" class="tab-content">
+<div class="container">
+  <div class="date-row">
+    <span class="today-label">Trening i dag</span>
+    <span class="date-display" id="treningDate"></span>
+  </div>
+
+  <!-- Forbrenning sammendrag -->
+  <div class="burn-summary">
+    <div>
+      <div class="burn-number" id="burnTotal">0</div>
+      <div class="burn-label">kcal forbrent</div>
+    </div>
+    <div class="net-cal">
+      <div class="burn-label" style="text-align:right">Netto kalorier</div>
+      <div class="net-number" id="netCal">0</div>
+      <div class="burn-label" id="netLabel" style="text-align:right"></div>
+    </div>
+  </div>
+
+  <p class="section-title">Velg øvelse</p>
+  <div class="exercise-grid" id="exerciseGrid"></div>
+
+  <div class="duration-wrap">
+    <label>⏱ Varighet</label>
+    <input type="number" class="duration-input" id="exDuration" value="30" min="1" max="300" oninput="updateBurn()">
+    <span style="font-size:0.82rem;color:var(--muted)">min</span>
+  </div>
+
+  <p class="section-title" style="margin-bottom:0.5rem">Intensitet</p>
+  <div class="intensity-wrap">
+    <button class="intensity-btn active" onclick="setIntensity(this, 0.8)">🚶 Lett</button>
+    <button class="intensity-btn" onclick="setIntensity(this, 1.0)">🏃 Moderat</button>
+    <button class="intensity-btn" onclick="setIntensity(this, 1.25)">🔥 Hard</button>
+  </div>
+
+  <textarea class="notes-area" id="exNotes" placeholder="Notater om treningen (valgfritt)..."></textarea>
+
+  <button class="save-btn" onclick="saveExercise()">✦ Lagre treningsøkt</button>
+
+  <div class="divider">Treningshistorikk</div>
+  <div class="card" id="trainHistory"><p class="empty-log">Ingen treningsøkter logget ennå.</p></div>
+</div>
+</div>
+
+<!-- ============ PROFIL TAB ============ -->
+<div id="tab-profil" class="tab-content">
+<div class="container">
+  <p class="section-title">Din profil</p>
+  <div class="card">
+    <div class="profile-grid">
+      <div class="input-group"><label>Alder</label><input type="number" id="profileAge" placeholder="32" min="10" max="100" oninput="saveProfile()"></div>
+      <div class="input-group"><label>Vekt (kg)</label><input type="number" id="profileWeight" placeholder="65" min="30" max="200" oninput="saveProfile()"></div>
+      <div class="input-group"><label>Høyde (cm)</label><input type="number" id="profileHeight" placeholder="168" min="100" max="220" oninput="saveProfile()"></div>
+      <div class="input-group">
+        <label>Biologisk kjønn</label>
+        <select id="profileSex" onchange="saveProfile()">
+          <option value="f">Kvinne</option>
+          <option value="m">Mann</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-group" style="margin-bottom:0.8rem">
+      <label>Aktivitetsnivå</label>
+      <select id="profileActivity" onchange="saveProfile()">
+        <option value="1.2">Stillesittende (lite/ingen trening)</option>
+        <option value="1.375">Lett aktiv (1–3 dager/uke)</option>
+        <option value="1.55" selected>Moderat aktiv (3–5 dager/uke)</option>
+        <option value="1.725">Veldig aktiv (6–7 dager/uke)</option>
+        <option value="1.9">Ekstremt aktiv (fysisk jobb + trening)</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Mål</label>
+      <select id="profileGoal" onchange="saveProfile()">
+        <option value="deficit">Gå ned i vekt (–300 kcal)</option>
+        <option value="maintain" selected>Vedlikeholde vekt</option>
+        <option value="surplus">Gå opp i vekt (+300 kcal)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card" id="tdeeCard" style="text-align:center;padding:1.5rem">
+    <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.08em">Ditt daglige kaloribudsjett</div>
+    <div style="font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--rose)" id="tdeeDisplay">—</div>
+    <div style="font-size:0.78rem;color:var(--muted);margin-top:0.3rem" id="tdeeSubtext">Fyll inn profilen din ovenfor</div>
+  </div>
+
+  <p class="section-title">Om appen</p>
+  <div class="card" style="font-size:0.8rem;color:var(--muted);line-height:1.6">
+    Alle data lagres lokalt i nettleseren din (localStorage). Ingenting sendes til noen server.
+    Husk å eksportere CSV-backup regelmessig fra Syklus-fanen.
+  </div>
+</div>
 </div>
 
 <script>
-const SYMPTOMS = [
-  'Oppblåst', 'Hodepine', 'Brøstspenning', 'Kramper', 'Ryggsmerter',
-  'Tretthet', 'Søvnproblem', 'Kvalme', 'Akne',
-  'Emosjonell', 'Irritabel', 'Engstelig', 'Nedfor', 'Kreativ',
-  'Sosial', 'Innadvendt', 'Fokusert', 'Rastløs',
-  'Økt appetitt', 'Søtsug', 'Redusert appetitt'
-];
+// ===================== DATA & UTILS =====================
+const now = new Date();
+const todayKey = now.toISOString().split('T')[0];
 
-const PHASES = {
-  luteal_late: {
-    icon: '🌑',
-    name: 'Sen lutealfase / PMS',
-    advice: 'Rolig tid – prioriter søvn, nærende mat og tid for deg selv. Unngå store beslutninger.',
-    class: 'phase-luteal'
-  },
-  luteal_mid: {
-    icon: '🌘',
-    name: 'Midtre lutealfase',
-    advice: 'Bra for detaljarbeid og å fullføre prosjekter. Trening: yoga, pilates, rolig styrke.',
-    class: 'phase-luteal'
-  },
-  ovulation: {
-    icon: '🌕',
-    name: 'Eggløsningsfase',
-    advice: 'Peak energi! Perfekt for viktige møter, presentasjoner og intensiv trening.',
-    class: 'phase-ovulation'
-  },
-  follicle: {
-    icon: '🌒',
-    name: 'Follikelfase',
-    advice: 'Energien stiger – sett i gang nye prosjekter, lær noe nytt, vær sosial.',
-    class: 'phase-follicle'
-  },
-  menstruation: {
-    icon: '🔴',
-    name: 'Menstruasjonsfase',
-    advice: 'Tid for hvile og refleksjon. Planlegg neste periode, vær snill med deg selv.',
-    class: 'phase-mens'
-  },
-  unknown: {
-    icon: '🌙',
-    name: 'Fortsett å logge',
-    advice: 'Etter noen uker med logging vil mønsteret ditt tre frem.',
-    class: ''
+function fmt(d) {
+  return d.toLocaleDateString('nb-NO', {weekday:'long', day:'numeric', month:'long'});
+}
+function fmtShort(d) {
+  return d.toLocaleDateString('nb-NO', {day:'numeric', month:'short'});
+}
+
+document.getElementById('todayDate').textContent = fmt(now);
+document.getElementById('matDate').textContent = fmt(now);
+document.getElementById('treningDate').textContent = fmt(now);
+
+// ===================== TABS =====================
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===================== PROFIL =====================
+function loadProfile() {
+  const p = JSON.parse(localStorage.getItem('profil') || '{}');
+  if (p.age) document.getElementById('profileAge').value = p.age;
+  if (p.weight) document.getElementById('profileWeight').value = p.weight;
+  if (p.height) document.getElementById('profileHeight').value = p.height;
+  if (p.sex) document.getElementById('profileSex').value = p.sex;
+  if (p.activity) document.getElementById('profileActivity').value = p.activity;
+  if (p.goal) document.getElementById('profileGoal').value = p.goal;
+  updateTDEE();
+}
+
+function saveProfile() {
+  const p = {
+    age: +document.getElementById('profileAge').value,
+    weight: +document.getElementById('profileWeight').value,
+    height: +document.getElementById('profileHeight').value,
+    sex: document.getElementById('profileSex').value,
+    activity: +document.getElementById('profileActivity').value,
+    goal: document.getElementById('profileGoal').value
+  };
+  localStorage.setItem('profil', JSON.stringify(p));
+  updateTDEE();
+  updateMacroGoals();
+}
+
+function calcTDEE() {
+  const p = JSON.parse(localStorage.getItem('profil') || '{}');
+  if (!p.age || !p.weight || !p.height) return null;
+  // Mifflin-St Jeor
+  let bmr;
+  if (p.sex === 'f') bmr = 10 * p.weight + 6.25 * p.height - 5 * p.age - 161;
+  else bmr = 10 * p.weight + 6.25 * p.height - 5 * p.age + 5;
+  let tdee = bmr * (p.activity || 1.55);
+  if (p.goal === 'deficit') tdee -= 300;
+  if (p.goal === 'surplus') tdee += 300;
+  return Math.round(tdee);
+}
+
+function updateTDEE() {
+  const tdee = calcTDEE();
+  if (tdee) {
+    document.getElementById('tdeeDisplay').textContent = tdee + ' kcal';
+    document.getElementById('tdeeSubtext').textContent = 'basert på din profil (Mifflin-St Jeor)';
+    document.getElementById('goalKcal').textContent = tdee;
+    updateCalRing();
   }
-};
+}
 
+function updateMacroGoals() {
+  const tdee = calcTDEE();
+  if (!tdee) return;
+  const protein = Math.round(tdee * 0.25 / 4);
+  const fat = Math.round(tdee * 0.30 / 9);
+  const carbs = Math.round(tdee * 0.45 / 4);
+  document.getElementById('proteinGoal').textContent = protein;
+  document.getElementById('carbsGoal').textContent = carbs;
+  document.getElementById('fatGoal').textContent = fat;
+  document.querySelectorAll('[id^="proteinVal"]').forEach(el => {});
+  updateMacroBars();
+}
+
+// ===================== SYKLUS =====================
+const SYMPTOMS = [
+  'Oppblåst','Hodepine','Brøstspenning','Kramper','Ryggsmerter',
+  'Tretthet','Søvnproblem','Kvalme','Akne',
+  'Emosjonell','Irritabel','Engstelig','Nedfor','Kreativ',
+  'Sosial','Innadvendt','Fokusert','Rastløs',
+  'Økt appetitt','Søtsug','Redusert appetitt'
+];
+const PHASES = {
+  luteal_late: { icon:'🌑', name:'Sen lutealfase / PMS', advice:'Rolig tid – prioriter søvn, nærende mat og tid for deg selv.', cls:'phase-luteal' },
+  luteal_mid:  { icon:'🌘', name:'Midtre lutealfase', advice:'Bra for detaljarbeid og å fullføre prosjekter. Trening: yoga, pilates.', cls:'phase-luteal' },
+  ovulation:   { icon:'🌕', name:'Eggløsningsfase', advice:'Peak energi! Perfekt for viktige møter og intensiv trening.', cls:'phase-ovulation' },
+  follicle:    { icon:'🌒', name:'Follikelfase', advice:'Energien stiger – nye prosjekter, lær noe nytt, vær sosial.', cls:'phase-follicle' },
+  menstruation:{ icon:'🔴', name:'Menstruasjonsfase', advice:'Hvile og refleksjon. Planlegg neste periode.', cls:'phase-mens' },
+  unknown:     { icon:'🌙', name:'Fortsett å logge', advice:'Etter noen uker vil mønsteret ditt tre frem.', cls:'' }
+};
 let selectedSymptoms = new Set();
 
-// Init symptoms
-const grid = document.getElementById('symptomsGrid');
+const sg = document.getElementById('symptomsGrid');
 SYMPTOMS.forEach(s => {
-  const chip = document.createElement('div');
-  chip.className = 'symptom-chip';
-  chip.textContent = s;
-  chip.onclick = () => {
-    chip.classList.toggle('active');
-    if (selectedSymptoms.has(s)) selectedSymptoms.delete(s);
-    else selectedSymptoms.add(s);
+  const c = document.createElement('div');
+  c.className = 'chip';
+  c.textContent = s;
+  c.onclick = () => {
+    c.classList.toggle('active');
+    selectedSymptoms.has(s) ? selectedSymptoms.delete(s) : selectedSymptoms.add(s);
     updatePhaseGuess();
   };
-  grid.appendChild(chip);
+  sg.appendChild(c);
 });
 
-// Date
-const now = new Date();
-document.getElementById('todayDate').textContent = now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
-
 function updateSlider(el, valId) {
-  const pct = ((el.value - 1) / 9 * 100).toFixed(0) + '%';
-  el.style.setProperty('--val', pct);
+  el.style.setProperty('--val', ((el.value-1)/9*100).toFixed(0)+'%');
   document.getElementById(valId).textContent = el.value;
   updatePhaseGuess();
 }
-
-// Init slider tracks
-document.querySelectorAll('input[type=range]').forEach(el => {
-  el.style.setProperty('--val', '50%');
-});
+document.querySelectorAll('input[type=range]').forEach(el => el.style.setProperty('--val','50%'));
 
 function updatePhaseGuess() {
   const energy = +document.getElementById('energy').value;
-  const mood = +document.getElementById('mood').value;
-  const syms = selectedSymptoms;
-
-  const hasPMS = syms.has('Emosjonell') || syms.has('Irritabel') || syms.has('Oppblåst') || syms.has('Kramper');
-  const highEnergy = energy >= 7;
-  const lowEnergy = energy <= 4;
-  const lowMood = mood <= 4;
-
+  const mood   = +document.getElementById('mood').value;
+  const syms   = selectedSymptoms;
+  const hasPMS = syms.has('Emosjonell')||syms.has('Irritabel')||syms.has('Oppblåst')||syms.has('Kramper');
   let phase = 'unknown';
-  if (hasPMS && lowMood) phase = 'luteal_late';
-  else if (hasPMS) phase = 'luteal_mid';
-  else if (highEnergy && mood >= 7 && (syms.has('Kreativ') || syms.has('Fokusert'))) phase = 'ovulation';
-  else if (highEnergy) phase = 'follicle';
-  else if (lowEnergy && syms.has('Tretthet')) phase = 'luteal_mid';
-  else if (syms.size === 0 && energy === 5) phase = 'unknown';
-
+  if (hasPMS && mood<=4) phase='luteal_late';
+  else if (hasPMS) phase='luteal_mid';
+  else if (energy>=7 && mood>=7 && (syms.has('Kreativ')||syms.has('Fokusert'))) phase='ovulation';
+  else if (energy>=7) phase='follicle';
+  else if (energy<=4 && syms.has('Tretthet')) phase='luteal_mid';
   const p = PHASES[phase];
   document.getElementById('phaseIcon').textContent = p.icon;
-  document.getElementById('phaseName').textContent = p.name;
-  document.getElementById('phaseName').className = p.class;
+  const pn = document.getElementById('phaseName');
+  pn.textContent = p.name; pn.className = p.cls;
   document.getElementById('phaseAdvice').textContent = p.advice;
 }
 
-function saveEntry() {
+function saveCycleEntry() {
   const entry = {
-    id: Date.now(),
-    date: now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
-    dateShort: now.toLocaleDateString('nb-NO'),
+    id: Date.now(), date: fmt(now), dateShort: fmtShort(now),
     energy: +document.getElementById('energy').value,
-    mood: +document.getElementById('mood').value,
+    mood:   +document.getElementById('mood').value,
     libido: +document.getElementById('libido').value,
-    focus: +document.getElementById('focus').value,
-    sleep: +document.getElementById('sleep').value,
+    focus:  +document.getElementById('focus').value,
+    sleep:  +document.getElementById('sleep').value,
     social: +document.getElementById('social').value,
     symptoms: [...selectedSymptoms],
     notes: document.getElementById('notes').value.trim(),
     phase: document.getElementById('phaseName').textContent
   };
-
-  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]');
+  const logs = JSON.parse(localStorage.getItem('sykluslogg')||'[]');
   logs.unshift(entry);
   localStorage.setItem('sykluslogg', JSON.stringify(logs));
-
-  // Reset
-  document.querySelectorAll('.symptom-chip.active').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.chip.active').forEach(c=>c.classList.remove('active'));
   selectedSymptoms.clear();
-  document.getElementById('notes').value = '';
-  document.querySelectorAll('input[type=range]').forEach(el => {
-    el.value = 5;
-    el.style.setProperty('--val', '50%');
-  });
-  document.querySelectorAll('.slider-value').forEach(el => el.textContent = '5');
-  updatePhaseGuess();
-  renderLog();
-
-  // Feedback
-  const btn = document.querySelector('.save-btn');
-  btn.textContent = '✓ Lagret!';
-  btn.style.background = '#7aa87a';
-  setTimeout(() => {
-    btn.textContent = '✦ Lagre dagens logg';
-    btn.style.background = '';
-  }, 2000);
+  document.getElementById('notes').value='';
+  document.querySelectorAll('input[type=range]').forEach(el=>{el.value=5;el.style.setProperty('--val','50%');});
+  document.querySelectorAll('.slider-value').forEach(el=>el.textContent='5');
+  updatePhaseGuess(); renderCycleLog();
+  flashBtn('.save-btn','✓ Lagret!','✦ Lagre dagens logg');
 }
 
-function renderLog() {
-  const container = document.getElementById('logHistory');
-  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]');
-  if (logs.length === 0) {
-    container.innerHTML = '<p class="empty-log">Ingen logger ennå – start med å logge i dag!</p>';
-    return;
-  }
-  container.innerHTML = logs.map(e => `
+function renderCycleLog() {
+  const c = document.getElementById('logHistory');
+  const logs = JSON.parse(localStorage.getItem('sykluslogg')||'[]');
+  if (!logs.length) { c.innerHTML='<p class="empty-log">Ingen logger ennå – start med å logge i dag!</p>'; return; }
+  c.innerHTML = logs.map(e => `
     <div class="log-entry">
       <div class="log-entry-header">
         <span class="log-date">${e.date}</span>
-        <div style="display:flex;gap:0.5rem;align-items:center">
+        <div style="display:flex;gap:.5rem;align-items:center">
           <span class="log-phase">${e.phase}</span>
-          <button class="delete-btn" onclick="deleteEntry(${e.id})" title="Slett">✕</button>
+          <button class="delete-btn" onclick="deleteCycleEntry(${e.id})">✕</button>
         </div>
       </div>
       <div class="log-bars">
-        ${renderBar('⚡', e.energy)}
-        ${renderBar('🌸', e.mood)}
-        ${renderBar('🔥', e.libido)}
-        ${renderBar('🧠', e.focus)}
-        ${renderBar('😴', e.sleep)}
-        ${renderBar('💬', e.social)}
+        ${rBar('⚡',e.energy)}${rBar('🌸',e.mood)}${rBar('🔥',e.libido)}
+        ${rBar('🧠',e.focus)}${rBar('😴',e.sleep)}${rBar('💬',e.social)}
       </div>
-      ${e.symptoms.length ? `<div class="log-chips">${e.symptoms.map(s => `<span class="log-chip">${s}</span>`).join('')}</div>` : ''}
-      ${e.notes ? `<p class="log-note">"${e.notes}"</p>` : ''}
-    </div>
-  `).join('');
+      ${e.symptoms&&e.symptoms.length?`<div class="log-chips">${e.symptoms.map(s=>`<span class="log-chip">${s}</span>`).join('')}</div>`:''}
+      ${e.notes?`<p class="log-note">"${e.notes}"</p>`:''}
+    </div>`).join('');
 }
-
-function renderBar(icon, val) {
-  const dots = Array.from({length: 10}, (_, i) => 
-    `<div class="mini-dot ${i < val ? 'filled' : ''}"></div>`
-  ).join('');
+function rBar(icon,val) {
+  const dots = Array.from({length:10},(_,i)=>`<div class="mini-dot${i<val?' filled':''}"></div>`).join('');
   return `<span class="log-bar">${icon}<div class="mini-dots">${dots}</div>${val}/10</span>`;
 }
-
-function deleteEntry(id) {
-  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]').filter(e => e.id !== id);
+function deleteCycleEntry(id) {
+  const logs = JSON.parse(localStorage.getItem('sykluslogg')||'[]').filter(e=>e.id!==id);
   localStorage.setItem('sykluslogg', JSON.stringify(logs));
-  renderLog();
+  renderCycleLog();
 }
-
 function exportCSV() {
-  const logs = JSON.parse(localStorage.getItem('sykluslogg') || '[]');
-  if (logs.length === 0) {
-    alert('Ingen logger å eksportere ennå!');
-    return;
-  }
-  const headers = ['Dato', 'Fase', 'Energi', 'Humør', 'Libido', 'Fokus', 'Søvn', 'Sosial lyst', 'Symptomer', 'Notater'];
-  const rows = logs.map(e => [
-    e.dateShort || e.date,
-    e.phase,
-    e.energy, e.mood, e.libido, e.focus, e.sleep, e.social,
-    '"' + (e.symptoms || []).join(', ') + '"',
-    '"' + (e.notes || '').replace(/"/g, '""') + '"'
+  const logs = JSON.parse(localStorage.getItem('sykluslogg')||'[]');
+  if (!logs.length) { alert('Ingen logger å eksportere!'); return; }
+  const h = ['Dato','Fase','Energi','Humør','Libido','Fokus','Søvn','Sosial lyst','Symptomer','Notater'];
+  const rows = logs.map(e=>[
+    e.dateShort||e.date, e.phase,
+    e.energy,e.mood,e.libido,e.focus,e.sleep,e.social,
+    '"'+(e.symptoms||[]).join(', ')+'"',
+    '"'+(e.notes||'').replace(/"/g,'""')+'"'
   ]);
-  const csv = [headers, ...rows].map(r => r.join(';')).join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const csv = [h,...rows].map(r=>r.join(';')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'sykluslogg.csv';
-  a.click();
+  const a = document.createElement('a'); a.href=url; a.download='sykluslogg.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
-renderLog();
+// ===================== MAT =====================
+const FOOD_DB = [
+  {name:'Havregrøt (100g)',kcal:367,protein:13,carbs:58,fat:7},
+  {name:'Egg (1 stk)',kcal:70,protein:6,carbs:0,fat:5},
+  {name:'Kyllingbryst (100g)',kcal:165,protein:31,carbs:0,fat:4},
+  {name:'Laks (100g)',kcal:208,protein:20,carbs:0,fat:13},
+  {name:'Brokkoli (100g)',kcal:34,protein:3,carbs:5,fat:0},
+  {name:'Brun ris (100g kokt)',kcal:123,protein:3,carbs:26,fat:1},
+  {name:'Fullkornsbrød (1 skive)',kcal:80,protein:4,carbs:14,fat:1},
+  {name:'Gresk yoghurt (150g)',kcal:104,protein:15,carbs:6,fat:3},
+  {name:'Banan (1 stk)',kcal:89,protein:1,carbs:23,fat:0},
+  {name:'Eple (1 stk)',kcal:52,protein:0,carbs:14,fat:0},
+  {name:'Mandler (30g)',kcal:174,protein:6,carbs:5,fat:15},
+  {name:'Avokado (½)',kcal:120,protein:2,carbs:6,fat:11},
+  {name:'Cottage cheese (100g)',kcal:98,protein:11,carbs:3,fat:5},
+  {name:'Linser (100g kokt)',kcal:116,protein:9,carbs:20,fat:0},
+  {name:'Pasta (100g kokt)',kcal:131,protein:5,carbs:25,fat:1},
+  {name:'Søtpotet (100g)',kcal:86,protein:2,carbs:20,fat:0},
+  {name:'Melk 1,5% (2dl)',kcal:90,protein:7,carbs:10,fat:3},
+  {name:'Proteinbar (1 stk)',kcal:200,protein:20,carbs:20,fat:7},
+  {name:'Rødvin (1 glass)',kcal:125,protein:0,carbs:4,fat:0},
+  {name:'Kaffe svart',kcal:2,protein:0,carbs:0,fat:0},
+];
+
+let todayFoods = JSON.parse(localStorage.getItem('matlogg-'+todayKey)||'[]');
+
+function searchFood() {
+  const q = document.getElementById('foodSearch').value.toLowerCase().trim();
+  const box = document.getElementById('foodSuggestions');
+  if (!q) { box.classList.add('hidden'); return; }
+  const matches = FOOD_DB.filter(f => f.name.toLowerCase().includes(q)).slice(0,6);
+  if (!matches.length) { box.classList.add('hidden'); return; }
+  box.innerHTML = matches.map(f=>`
+    <div class="food-suggestion-item" onclick="addFoodFromDB('${f.name}')">
+      <span>${f.name}</span>
+      <span class="food-kcal-badge">${f.kcal} kcal · P:${f.protein}g K:${f.carbs}g F:${f.fat}g</span>
+    </div>`).join('');
+  box.classList.remove('hidden');
+}
+function addFoodFromDB(name) {
+  const f = FOOD_DB.find(x=>x.name===name);
+  if (!f) return;
+  todayFoods.push({...f, id: Date.now()});
+  document.getElementById('foodSearch').value='';
+  document.getElementById('foodSuggestions').classList.add('hidden');
+  renderFoodList(); updateMacroBars();
+}
+function addCustomFood() {
+  const name = document.getElementById('customName').value.trim();
+  const kcal = +document.getElementById('customKcal').value;
+  if (!name || !kcal) { alert('Fyll inn navn og kalorier.'); return; }
+  todayFoods.push({
+    name, kcal, id: Date.now(),
+    protein: +document.getElementById('customProtein').value||0,
+    carbs:   +document.getElementById('customCarbs').value||0,
+    fat:     +document.getElementById('customFat').value||0
+  });
+  ['customName','customKcal','customProtein','customCarbs','customFat'].forEach(id=>document.getElementById(id).value='');
+  renderFoodList(); updateMacroBars();
+}
+function removeFoodItem(id) {
+  todayFoods = todayFoods.filter(f=>f.id!==id);
+  renderFoodList(); updateMacroBars();
+}
+function renderFoodList() {
+  const c = document.getElementById('foodList');
+  if (!todayFoods.length) { c.innerHTML='<p class="empty-log">Ingen mat logget ennå i dag.</p>'; return; }
+  c.innerHTML = todayFoods.map(f=>`
+    <div class="food-list-item">
+      <div>
+        <div class="food-list-name">${f.name}</div>
+        <div class="food-list-macros">P: ${f.protein}g · K: ${f.carbs}g · F: ${f.fat}g</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.7rem">
+        <span class="food-list-kcal">${f.kcal}</span>
+        <button class="delete-btn" onclick="removeFoodItem(${f.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+function updateMacroBars() {
+  const totKcal    = todayFoods.reduce((s,f)=>s+f.kcal,0);
+  const totProtein = todayFoods.reduce((s,f)=>s+f.protein,0);
+  const totCarbs   = todayFoods.reduce((s,f)=>s+f.carbs,0);
+  const totFat     = todayFoods.reduce((s,f)=>s+f.fat,0);
+  const goal  = calcTDEE() || 2000;
+  const gProt = +document.getElementById('proteinGoal').textContent || 130;
+  const gCarb = +document.getElementById('carbsGoal').textContent || 220;
+  const gFat  = +document.getElementById('fatGoal').textContent || 65;
+  document.getElementById('totalKcal').textContent = totKcal;
+  document.getElementById('goalKcal').textContent = goal;
+  document.getElementById('proteinVal').innerHTML = totProtein+' / <span id="proteinGoal">'+gProt+'</span>g';
+  document.getElementById('carbsVal').innerHTML   = totCarbs+' / <span id="carbsGoal">'+gCarb+'</span>g';
+  document.getElementById('fatVal').innerHTML     = totFat+' / <span id="fatGoal">'+gFat+'</span>g';
+  document.getElementById('proteinBar').style.width = Math.min(totProtein/gProt*100,100)+'%';
+  document.getElementById('carbsBar').style.width   = Math.min(totCarbs/gCarb*100,100)+'%';
+  document.getElementById('fatBar').style.width     = Math.min(totFat/gFat*100,100)+'%';
+  updateCalRing(totKcal, goal);
+}
+function updateCalRing(eaten, goal) {
+  if (!eaten) eaten = todayFoods.reduce((s,f)=>s+f.kcal,0);
+  if (!goal)  goal  = calcTDEE()||2000;
+  const pct = Math.min(eaten/goal, 1);
+  const circ = 2*Math.PI*38;
+  document.getElementById('calRing').style.strokeDashoffset = circ*(1-pct);
+  document.getElementById('calRing').style.stroke = pct>1?'#c47a7a':'var(--rose)';
+}
+function saveFoodLog() {
+  localStorage.setItem('matlogg-'+todayKey, JSON.stringify(todayFoods));
+  const allKeys = JSON.parse(localStorage.getItem('matlogg-keys')||'[]');
+  if (!allKeys.includes(todayKey)) { allKeys.unshift(todayKey); localStorage.setItem('matlogg-keys', JSON.stringify(allKeys)); }
+  renderFoodHistory();
+  flashBtn('#tab-mat .save-btn','✓ Lagret!','✦ Lagre matlogg');
+}
+function renderFoodHistory() {
+  const c = document.getElementById('foodHistory');
+  const keys = JSON.parse(localStorage.getItem('matlogg-keys')||'[]').filter(k=>k!==todayKey);
+  if (!keys.length) { c.innerHTML=''; return; }
+  c.innerHTML = keys.slice(0,7).map(k=>{
+    const foods = JSON.parse(localStorage.getItem('matlogg-'+k)||'[]');
+    const totKcal = foods.reduce((s,f)=>s+f.kcal,0);
+    const totP = foods.reduce((s,f)=>s+f.protein,0);
+    const totC = foods.reduce((s,f)=>s+f.carbs,0);
+    const totF = foods.reduce((s,f)=>s+f.fat,0);
+    return `<div class="log-entry">
+      <div class="log-entry-header">
+        <span class="log-date">${k}</span>
+        <span class="log-phase">${totKcal} kcal</span>
+      </div>
+      <div class="log-bars" style="font-size:0.76rem;color:var(--muted)">
+        🥩 ${totP}g protein · 🌾 ${totC}g karbo · 🥑 ${totF}g fett
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===================== TRENING =====================
+const EXERCISES = [
+  {name:'Løping',icon:'🏃',met:9.8},
+  {name:'Sykling',icon:'🚴',met:7.5},
+  {name:'Styrke',icon:'🏋️',met:5.0},
+  {name:'Svømming',icon:'🏊',met:7.0},
+  {name:'Yoga',icon:'🧘',met:2.5},
+  {name:'Gåtur',icon:'🚶',met:3.5},
+  {name:'Pilates',icon:'🌀',met:3.0},
+  {name:'Dans',icon:'💃',met:5.5},
+  {name:'HIIT',icon:'🔥',met:10.5},
+  {name:'Tredemølle',icon:'⚡',met:8.0},
+];
+let selectedExercise = null;
+let intensityFactor = 0.8;
+let todayExercises = JSON.parse(localStorage.getItem('treningslogg-'+todayKey)||'[]');
+
+const eg = document.getElementById('exerciseGrid');
+EXERCISES.forEach(ex => {
+  const p = JSON.parse(localStorage.getItem('profil')||'{}');
+  const card = document.createElement('div');
+  card.className = 'exercise-card';
+  card.innerHTML = `<div class="ex-icon">${ex.icon}</div><div class="ex-name">${ex.name}</div><div class="ex-kcal">${ex.met} MET</div>`;
+  card.onclick = () => {
+    document.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('active'));
+    card.classList.add('active');
+    selectedExercise = ex;
+    updateBurn();
+  };
+  eg.appendChild(card);
+});
+
+function setIntensity(btn, factor) {
+  document.querySelectorAll('.intensity-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  intensityFactor = factor;
+  updateBurn();
+}
+function updateBurn() {
+  if (!selectedExercise) return;
+  const p = JSON.parse(localStorage.getItem('profil')||'{}');
+  const weight = p.weight || 65;
+  const duration = +document.getElementById('exDuration').value || 30;
+  const kcal = Math.round(selectedExercise.met * intensityFactor * weight * (duration/60));
+  document.getElementById('burnTotal').textContent = kcal;
+  updateNetCal(kcal);
+}
+function updateNetCal(burned) {
+  const eaten = todayFoods.reduce((s,f)=>s+f.kcal,0);
+  const goal  = calcTDEE()||2000;
+  const net   = eaten - burned;
+  const diff  = net - goal;
+  const el    = document.getElementById('netCal');
+  el.textContent = net;
+  el.className = 'net-number ' + (diff > 0 ? 'surplus' : 'deficit');
+  document.getElementById('netLabel').textContent = diff > 0 ? `+${diff} over mål` : `${Math.abs(diff)} under mål`;
+}
+function saveExercise() {
+  if (!selectedExercise) { alert('Velg en øvelse først.'); return; }
+  const p = JSON.parse(localStorage.getItem('profil')||'{}');
+  const weight = p.weight||65;
+  const duration = +document.getElementById('exDuration').value||30;
+  const kcal = Math.round(selectedExercise.met * intensityFactor * weight * (duration/60));
+  const entry = {
+    id: Date.now(), name: selectedExercise.name, icon: selectedExercise.icon,
+    duration, kcal, intensity: intensityFactor===0.8?'Lett':intensityFactor===1.0?'Moderat':'Hard',
+    notes: document.getElementById('exNotes').value.trim()
+  };
+  todayExercises.push(entry);
+  localStorage.setItem('treningslogg-'+todayKey, JSON.stringify(todayExercises));
+  const allKeys = JSON.parse(localStorage.getItem('trenings-keys')||'[]');
+  if (!allKeys.includes(todayKey)) { allKeys.unshift(todayKey); localStorage.setItem('trenings-keys', JSON.stringify(allKeys)); }
+  document.getElementById('exNotes').value='';
+  renderTrainHistory();
+  flashBtn('#tab-trening .save-btn','✓ Lagret!','✦ Lagre treningsøkt');
+}
+function renderTrainHistory() {
+  const c = document.getElementById('trainHistory');
+  const allKeys = JSON.parse(localStorage.getItem('trenings-keys')||'[]');
+  let allEntries = [];
+  allKeys.slice(0,14).forEach(k=>{
+    const entries = JSON.parse(localStorage.getItem('treningslogg-'+k)||'[]');
+    allEntries = allEntries.concat(entries.map(e=>({...e, dateKey:k})));
+  });
+  if (!allEntries.length) { c.innerHTML='<p class="empty-log">Ingen treningsøkter logget ennå.</p>'; return; }
+  c.innerHTML = allEntries.slice(0,10).map(e=>`
+    <div class="train-log-item">
+      <div>
+        <div style="font-weight:500">${e.icon} ${e.name} · ${e.duration} min · ${e.intensity}</div>
+        <div style="font-size:0.72rem;color:var(--muted)">${e.dateKey}${e.notes?' · '+e.notes:''}</div>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--green)">${e.kcal} kcal</div>
+    </div>`).join('');
+}
+
+// ===================== UTILS =====================
+function flashBtn(selector, newText, origText) {
+  const btn = document.querySelector(selector);
+  if (!btn) return;
+  btn.textContent = newText;
+  btn.style.background = 'var(--green)';
+  setTimeout(()=>{ btn.textContent=origText; btn.style.background=''; }, 2000);
+}
+
+// ===================== INIT =====================
+loadProfile();
+renderCycleLog();
+renderFoodList();
+updateMacroBars();
+renderTrainHistory();
+renderFoodHistory();
+
+// Close food search on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.food-search-wrap'))
+    document.getElementById('foodSuggestions').classList.add('hidden');
+});
 </script>
 </body>
 </html>
