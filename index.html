@@ -540,24 +540,41 @@ window.signOut = async () => {
   if (confirm('Er du sikker på at du vil logge ut?')) await fbSignOut(auth);
 };
 
-// Handle redirect result first
-getRedirectResult(auth).catch(e => console.error('Redirect error:', e));
+function showLogin() {
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("loadingScreen").style.display = "none";
+  document.getElementById("appScreen").style.display = "none";
+}
+function showLoading() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("loadingScreen").style.display = "flex";
+  document.getElementById("appScreen").style.display = "none";
+}
+async function showApp(user) {
+  currentUser = user;
+  showLoading();
+  await initApp();
+  document.getElementById("loadingScreen").style.display = "none";
+  document.getElementById("appScreen").style.display = "block";
+}
 
-onAuthStateChanged(auth, async user => {
-  if (user) {
-    currentUser = user;
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('loadingScreen').style.display = 'flex';
-    document.getElementById('appScreen').style.display = 'none';
-    await initApp();
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('appScreen').style.display = 'block';
+showLoading();
+
+getRedirectResult(auth).then(async result => {
+  if (result && result.user) {
+    await showApp(result.user);
   } else {
-    currentUser = null;
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('loadingScreen').style.display = 'none';
-    document.getElementById('appScreen').style.display = 'none';
+    onAuthStateChanged(auth, async user => {
+      if (user) { await showApp(user); }
+      else { showLogin(); }
+    });
   }
+}).catch(e => {
+  console.error("Redirect error:", e);
+  onAuthStateChanged(auth, async user => {
+    if (user) { await showApp(user); }
+    else { showLogin(); }
+  });
 });
 
 // --- SYNC HELPERS ---
