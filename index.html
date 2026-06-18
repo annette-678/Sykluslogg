@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sykluslogg">
+<meta name="theme-color" content="#c47a5a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-512.svg">
 <title>Sykluslogg</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -332,9 +338,9 @@ input[type="range"]::-webkit-slider-thumb {
     <input class="auth-input" type="email" id="authEmail" placeholder="E-postadresse" autocomplete="email">
     <input class="auth-input" type="password" id="authPassword" placeholder="Passord (minst 6 tegn)" autocomplete="current-password">
     <p class="auth-error hidden" id="authError"></p>
-    <button class="google-btn" style="width:100%;justify-content:center;margin-bottom:0.7rem" onclick="emailSignIn()">Logg inn</button>
-    <button class="google-btn" style="width:100%;justify-content:center;background:var(--cream);color:var(--deep)" onclick="emailSignUp()">Opprett konto</button>
-    <button class="forgot-btn" onclick="resetPassword()">Glemt passord?</button>
+    <button class="google-btn" style="width:100%;justify-content:center;margin-bottom:0.7rem" id="btnSignIn">Logg inn</button>
+    <button class="google-btn" style="width:100%;justify-content:center;background:var(--cream);color:var(--deep)" id="btnSignUp">Opprett konto</button>
+    <button class="forgot-btn" id="btnReset">Glemt passord?</button>
   </div>
   <p class="login-note">Dataene dine lagres sikkert i Firebase og er tilgjengelige på alle enheter.</p>
 </div>
@@ -352,7 +358,7 @@ input[type="range"]::-webkit-slider-thumb {
   <div class="user-row">
     <img class="user-avatar" id="userAvatar" src="" alt="">
     <span class="user-name" id="userName"></span>
-    <button class="signout-btn" onclick="signOut()">logg ut</button>
+    <button class="signout-btn" id="btnSignOut">logg ut</button>
   </div>
   <div style="text-align:center;margin-bottom:0.2rem">
     <span class="sync-badge"><span class="sync-dot" id="syncDot"></span><span id="syncText">Synkronisert</span></span>
@@ -608,6 +614,46 @@ async function showApp(user) {
 window.addEventListener("DOMContentLoaded", () => {
 
 showLoading();
+
+// Wire up auth buttons
+document.getElementById('btnSignIn').addEventListener('click', async () => {
+  clearAuthError();
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if (!email || !password) { showAuthError('Fyll inn e-post og passord.'); return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password') showAuthError('Feil e-post eller passord.');
+    else if (e.code === 'auth/user-not-found') showAuthError('Ingen konto med denne e-posten. Trykk Opprett konto.');
+    else showAuthError('Innlogging feilet: ' + e.message);
+  }
+});
+document.getElementById('btnSignUp').addEventListener('click', async () => {
+  clearAuthError();
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if (!email || !password) { showAuthError('Fyll inn e-post og passord.'); return; }
+  if (password.length < 6) { showAuthError('Passordet må være minst 6 tegn.'); return; }
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    if (e.code === 'auth/email-already-in-use') showAuthError('Denne e-posten er allerede registrert. Prøv å logge inn.');
+    else showAuthError('Opprettelse feilet: ' + e.message);
+  }
+});
+document.getElementById('btnReset').addEventListener('click', async () => {
+  const email = document.getElementById('authEmail').value.trim();
+  if (!email) { showAuthError('Skriv inn e-postadressen din først.'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showAuthError('✓ Tilbakestillingslenke sendt til ' + email);
+  } catch(e) { showAuthError('Feil: ' + e.message); }
+});
+document.getElementById('btnSignOut').addEventListener('click', async () => {
+  if (confirm('Er du sikker på at du vil logge ut?')) await fbSignOut(auth);
+});
+
 onAuthStateChanged(auth, async user => {
   if (user) { await showApp(user); }
   else { showLogin(); }

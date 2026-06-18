@@ -1,0 +1,13 @@
+{
+  "name": "Sykluslogg",
+  "short_name": "Sykluslogg",
+  "description": "Bli kjent med din egen rytme",
+  "start_url": "/Sykluslogg/",
+  "display": "standalone",
+  "background_color": "#fdf6ee",
+  "theme_color": "#c47a5a",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
