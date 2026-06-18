@@ -558,7 +558,7 @@ async function showApp(user) {
   document.getElementById("appScreen").style.display = "block";
 }
 
-showLoading();
+window.addEventListener("DOMContentLoaded", () => {
 
 getRedirectResult(auth).then(async result => {
   if (result && result.user) {
@@ -961,6 +961,8 @@ function renderTrainHistory(){
 }
 
 document.addEventListener('click',e=>{if(!e.target.closest('.food-search-wrap'))document.getElementById('foodSuggestions').classList.add('hidden');});
+
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
